@@ -4,6 +4,7 @@ const sass = require('gulp-sass');
 const cleanCSS = require('gulp-clean-css');
 const rename = require('gulp-rename');
 const del = require('del');
+const concatCss = require('gulp-concat-css');
 
 const paths = {
   layouts: {
@@ -62,6 +63,7 @@ function css() {
   return gulp
     .src(paths.styles.src)
     .pipe(sass())
+    .pipe(concatCss('style.css'))
     .pipe(cleanCSS())
     .pipe(rename({
       suffix: '.min'
@@ -84,6 +86,7 @@ function js() {
 function copiedCss() {
   return gulp
     .src(paths.vendorsCss.src)
+    .pipe(cleanCSS())
     .pipe(gulp.dest(paths.vendorsCss.dest))
     .pipe(browsersync.stream())
 }
