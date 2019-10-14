@@ -17,6 +17,14 @@ const paths = {
   scripts: {
     src: 'app/js/**/*.js',
     dest: 'build/js'
+  },
+  vendorsCss: {
+    src: 'app/vendors/**/*.css',
+    dest: 'build/css/vendors'
+  },
+  vendorsJs: {
+    src: 'app/vendors/**/*.js',
+    dest: 'build/js/vendors'
   }
 };
 
@@ -65,8 +73,25 @@ function css() {
 function js() {
   return gulp
     .src(paths.scripts.src)
+    .pipe(rename({
+      suffix: '.min'
+    }))
     .pipe(gulp.dest(paths.scripts.dest))
     // return stream
+    .pipe(browsersync.stream())
+}
+
+function copiedCss() {
+  return gulp
+    .src(paths.vendorsCss.src)
+    .pipe(gulp.dest(paths.vendorsCss.dest))
+    .pipe(browsersync.stream())
+}
+
+function copiedJs() {
+  return gulp
+    .src(paths.vendorsJs.src)
+    .pipe(gulp.dest(paths.vendorsJs.dest))
     .pipe(browsersync.stream())
 }
 
@@ -77,11 +102,13 @@ function watchFiles() {
 }
 
 const watch = gulp.parallel(watchFiles, browserSync);
-const build = gulp.series(clean, gulp.parallel(html, css, js));
+const build = gulp.series(clean, gulp.parallel(html, css, js, copiedCss, copiedJs));
 
 exports.html = html;
 exports.css = css;
 exports.js = js;
+exports.copiedCss = copiedCss
+exports.copiedJs = copiedJs
 exports.clean = clean;
 exports.watch = watch;
 exports.build = build;
