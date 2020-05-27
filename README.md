@@ -1,4 +1,7 @@
-Gulp website starter - 
+Gulp website starter includes:  
+- normalize.css  
+- SASS  
+- jQuery  
 
 ### Requirements
 - node.js
@@ -13,9 +16,6 @@ npm install -g gulp-cli
 ```
 ```sh
 npm install
-```
-```sh
-gulp build
 ```
 ```sh
 gulp
