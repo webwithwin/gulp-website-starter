@@ -105,16 +105,16 @@ function watchFiles() {
 }
 
 const watch = gulp.parallel(watchFiles, browserSync);
-const build = gulp.series(clean, gulp.parallel(html, css, js, copiedCss, copiedJs));
+const build = gulp.series(clean, gulp.parallel(html, css, js, copiedCss, copiedJs), watch);
 
 exports.html = html;
 exports.css = css;
 exports.js = js;
-exports.copiedCss = copiedCss
-exports.copiedJs = copiedJs
+exports.copiedCss = copiedCss;
+exports.copiedJs = copiedJs;
 exports.clean = clean;
 exports.watch = watch;
 exports.build = build;
 
 // Default gulp
-exports.default = watch;
+exports.default = build;
