@@ -1,1 +1,4 @@
-console.log('Ini script')
+(function() {
+  "use strict";
+  
+})();

@@ -5,6 +5,7 @@ const cleanCSS = require('gulp-clean-css');
 const rename = require('gulp-rename');
 const del = require('del');
 const concatCss = require('gulp-concat-css');
+const fileinclude = require('gulp-file-include');
 
 const paths = {
   layouts: {
@@ -18,6 +19,10 @@ const paths = {
   scripts: {
     src: 'app/js/**/*.js',
     dest: 'build/js'
+  },
+  images: {
+    src: 'app/images/**/*.*',
+    dest: 'build/images'
   },
   vendorsCss: {
     src: 'app/vendors/**/*.css',
@@ -33,7 +38,7 @@ const paths = {
 function browserSync(done) {
   browsersync.init({
     server: {
-      baseDir: './build/'
+      baseDir: './build'
     },
     port: 8888
   });
@@ -54,6 +59,7 @@ function clean() {
 function html() {
   return gulp
     .src(paths.layouts.src)
+    .pipe(fileinclude())
     .pipe(gulp.dest(paths.layouts.dest))
     // return stream
     .pipe(browsersync.stream())
@@ -83,6 +89,14 @@ function js() {
     .pipe(browsersync.stream())
 }
 
+function img() {
+  return gulp
+    .src(paths.images.src)
+    .pipe(gulp.dest(paths.images.dest))
+    // return stream
+    .pipe(browsersync.stream())
+}
+
 function copiedCss() {
   return gulp
     .src(paths.vendorsCss.src)
@@ -102,14 +116,16 @@ function watchFiles() {
   gulp.watch(paths.layouts.src, html)
   gulp.watch(paths.styles.src, css)
   gulp.watch(paths.scripts.src, js)
+  gulp.watch(paths.images.src, img)
 }
 
 const watch = gulp.parallel(watchFiles, browserSync);
-const build = gulp.series(clean, gulp.parallel(html, css, js, copiedCss, copiedJs), watch);
+const build = gulp.series(clean, gulp.parallel(html, css, js, img, copiedCss, copiedJs), watch);
 
 exports.html = html;
 exports.css = css;
 exports.js = js;
+exports.img = img;
 exports.copiedCss = copiedCss;
 exports.copiedJs = copiedJs;
 exports.clean = clean;
